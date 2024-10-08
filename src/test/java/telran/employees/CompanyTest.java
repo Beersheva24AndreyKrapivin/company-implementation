@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import telran.io.Persistable;
+
 class CompanyTest {
 	private static final long ID1 = 123;
 	private static final int SALARY1 = 1000;
@@ -72,8 +74,12 @@ class CompanyTest {
 
 	@Test
 	void testIterator() {
+		runTestIterator(company);
+	}
+
+	private void runTestIterator(Company companyPar) {
 		Employee[] expected = { empl2, empl1, empl3 };
-		Iterator<Employee> it = company.iterator();
+		Iterator<Employee> it = companyPar.iterator();
 		int index = 0;
 		while (it.hasNext()) {
 			assertEquals(expected[index++], it.next());
@@ -128,6 +134,22 @@ class CompanyTest {
 		assertEquals(0, company.getDepartmentBudget(DEPARTMENT2));
 		assertArrayEquals(new Manager[0], company.getManagersWithMostFactor());
 		assertArrayEquals(new String[] { DEPARTMENT1 }, company.getDepartments());
+	}
+
+	@Test
+	void jsonTest() {
+		Employee empl = Employee.getEmployeeFromJSON("{\"basicSalary\":1000,\"className\":\"telran.employees.Manager\",\"id\":123,\"department\":\"QA\",\"factor\":2}");
+		assertEquals(empl, new Manager(ID1, SALARY1, DEPARTMENT1, FACTOR1));
+	}
+
+	@Test
+	void persistenceTest() {
+		if (company instanceof Persistable persCompany) {
+			persCompany.saveToFile("company.data");
+			CompanyImpl comp = new CompanyImpl();
+			comp.restoreFromFile("company.data");
+			runTestIterator(comp);
+		}
 	}
 
 }

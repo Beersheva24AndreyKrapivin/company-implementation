@@ -1,8 +1,15 @@
 package telran.employees;
 
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-public class CompanyImpl implements Company {
+import telran.io.Persistable;
+
+public class CompanyImpl implements Company, Persistable {
     private TreeMap<Long, Employee> employees = new TreeMap<>();
     private HashMap<String, List<Employee>> employeesDepartment = new HashMap<>();
     private TreeMap<Float, List<Manager>> managersFactor = new TreeMap<>();
@@ -125,6 +132,28 @@ public class CompanyImpl implements Company {
             res = managersFactor.lastEntry().getValue().toArray(Manager[]::new);
         }
         return res;
+    }
+
+    @Override
+    public void saveToFile(String fileName) {
+        try {
+            PrintWriter printWriter = new PrintWriter(fileName);
+            employees.values().stream().forEach(e -> printWriter.println(e.toString()));
+            printWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void restoreFromFile(String fileName) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            bufferedReader.lines().map(Employee::getEmployeeFromJSON).forEach(this::addEmployee);
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
