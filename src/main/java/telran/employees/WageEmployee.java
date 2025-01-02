@@ -35,4 +35,11 @@ public class WageEmployee extends Employee {
         hours = jsonObj.getInt("hours");
     }
 
+    public int getHours() {
+        return hours;
+    }
+    public int getWage() {
+        return wage;
+    }
+
 }
