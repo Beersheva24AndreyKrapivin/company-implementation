@@ -7,6 +7,7 @@ import telran.employees.Employee;
 import telran.employees.Manager;
 
 @Entity
+@DiscriminatorValue("Manager")
 public class ManagerEntity extends EmployeeEntity{
     private float factor;
 
@@ -16,8 +17,7 @@ public class ManagerEntity extends EmployeeEntity{
         //filling relevant fields
         if (empl != null) {
             super.fromEmployeeDto(empl);
-            Manager manager = (Manager) empl;
-            this.factor = manager.getFactor();
+            this.factor = ((Manager) empl).getFactor();
         }
 
     }

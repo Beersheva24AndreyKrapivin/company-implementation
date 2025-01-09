@@ -1,9 +1,13 @@
-package telran.employees;
+package telran.employees.db.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import telran.employees.Employee;
+import telran.employees.Manager;
+import telran.employees.SalesPerson;
+import telran.employees.WageEmployee;
 import telran.employees.db.jpa.EmployeeEntity;
 import telran.employees.db.jpa.EmployeesMapper;
 
